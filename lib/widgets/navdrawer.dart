@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class NavDrawer extends StatelessWidget {
@@ -11,21 +13,39 @@ class NavDrawer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-      const UserAccountsDrawerHeader( // <-- SEE HERE
-      decoration: BoxDecoration(color: Color(0xff764abc)),
-    accountName: Text("Abdual Mateen",
+
+       UserAccountsDrawerHeader( // <-- SEE HERE
+
+      decoration: const BoxDecoration(color: Color(0xff764abc)),
+    accountName:Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+      children:const [
+        Text("Abdual Mateen",
     style: TextStyle(
     fontWeight: FontWeight.bold,
     ),
     ),
-    accountEmail: Text(
+  ],
+  ),
+    accountEmail:Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children:const [
+
+    Text(
     "abdul.Mateen@gmail.com",
     style: TextStyle(
     fontWeight: FontWeight.bold,
     ),
     ),
-    currentAccountPicture: FlutterLogo(),
+    ],
     ),
+
+    currentAccountPicture:  const CircleAvatar(
+      radius: 48, // Image radius
+      backgroundImage: AssetImage('assets/images/ic_user_profile.png'),//NetworkImage('file:E://TestApp/shopapp/assets/images/ic_user_profile.png'),
+    ),// FlutterLogo(),
+
+       ),
           ListTile(
             leading: const Icon(Icons.input),
             title: const Text('Welcome'),

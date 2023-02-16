@@ -1,10 +1,32 @@
 import 'dart:async';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shopapp/Models/DBHelper.dart';
 import 'package:flutter/material.dart';
-import 'package:shopapp/widgets/navdrawer.dart';
+import 'package:shopapp/routes.dart';
+import 'package:shopapp/screens/splash/splash_screen.dart';
+import 'dart:io';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:shopapp/Models/Product.dart';
+import 'Models/currentUser.dart';
+import 'firebase_options.dart';
+
+import 'package:path/path.dart' as path;
+import 'package:image_picker/image_picker.dart';
 
 import 'login.dart';
-void main() {
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Initialize a new Firebase App instance
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await DBHelper.connect();
+  await DBHelper.getproductCollections();
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  CurrentUser.setuserID = prefs.getString("userID");
+
   runApp(const MyApp());
 }
 
@@ -28,7 +50,13 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Pizzadda Home Page'),
+      //home: const MyHomePage(title: 'Pizzadda Home Page'),
+      debugShowCheckedModeBanner: false,
+
+      home: const SplashScreen(),
+      // We use routeName so that we dont need to remember the name
+      initialRoute: SplashScreen.routeName,
+      routes: routes,
     );
   }
 }
@@ -52,12 +80,26 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  //final GlobalKey<ScaffoldState> _key = GlobalKey();
 
-  final GlobalKey<ScaffoldState> _key = GlobalKey();
+  List<Map<String, dynamic>> data = [];
 
   navigatePage() {
-   // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => login()));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) {
+          return const Login();
+        },
+        /* settings: RouteSettings(
+          arguments: data,
+        ),*/
+      ),
+    ).then((value) => setState(() {}));
+
+    //  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const Login()));
   }
+
   splashMove() {
     return Timer(const Duration(seconds: 4), navigatePage);
   }
@@ -68,8 +110,6 @@ class _MyHomePageState extends State<MyHomePage> {
     splashMove();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -78,22 +118,49 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return Scaffold(
-      drawer: const NavDrawer(),
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Container(
-          color: Colors.white,
-          child: const Center(
-            child: Image(
-              image: AssetImage("Img/ic_logo.png"),
-              height: 140,
-              width: 140,
-            ),
-          )),
-      );
+
+    return FutureBuilder(
+        future: DBHelper.getDocuments(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Container(
+              color: Colors.white,
+              child: const LinearProgressIndicator(
+                backgroundColor: Colors.black,
+              ),
+            );
+          } else {
+            if (snapshot.hasError) {
+              return Container(
+                color: Colors.white,
+                child: Center(
+                  child: Text(
+                    'Something went wrong, try again.',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                ),
+              );
+            } else {
+              data = snapshot.data!;
+              return Scaffold(
+                // drawer: const NavDrawer(),
+                appBar: AppBar(
+                  // Here we take the value from the MyHomePage object that was created by
+                  // the App.build method, and use it to set our appbar title.
+                  title: Text(widget.title),
+                ),
+                body: Container(
+                    color: Colors.white,
+                    child: const Center(
+                      child: Image(
+                        image: AssetImage("assets/images/ic_logo.png"),
+                        height: 140,
+                        width: 140,
+                      ),
+                    )),
+              );
+            }
+          }
+        });
   }
 }
