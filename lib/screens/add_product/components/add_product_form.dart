@@ -810,15 +810,17 @@ class _AddProductFormState extends State<AddProductForm> {
 
   List<DropdownMenuItem<String>> get dropdownItems {
     List<DropdownMenuItem<String>> menuItems = [
-      DropdownMenuItem(child: Text("Burger"), value: "Burgers"),
-      DropdownMenuItem(child: Text("Pizza"), value: "Pizza"),
-      DropdownMenuItem(child: Text("Wings"), value: "Wings"),
-      DropdownMenuItem(child: Text("Hot Shots"), value: "Hot Shots"),
-      DropdownMenuItem(child: Text("Fried Platter"), value: "Fried Platter"),
-      DropdownMenuItem(child: Text("Loaded Fries"), value: "Loaded Fries"),
-      DropdownMenuItem(child: Text("Beverages"), value: "Beverages"),
-      DropdownMenuItem(child: Text("Deals"), value: "Deals"),
-      DropdownMenuItem(child: Text("Parathas"), value: "Parathas"),
+      const DropdownMenuItem(value: "Burgers", child: Text("Burger")),
+      const DropdownMenuItem(value: "Pizza", child: Text("Pizza")),
+      const DropdownMenuItem(value: "Wings", child: Text("Wings")),
+      const DropdownMenuItem(value: "Hot Shots", child: Text("Hot Shots")),
+      const DropdownMenuItem(
+          value: "Fried Platter", child: Text("Fried Platter")),
+      const DropdownMenuItem(
+          value: "Loaded Fries", child: Text("Loaded Fries")),
+      const DropdownMenuItem(value: "Beverages", child: Text("Beverages")),
+      const DropdownMenuItem(value: "Deals", child: Text("Deals")),
+      const DropdownMenuItem(value: "Parathas", child: Text("Parathas")),
     ];
 
     return menuItems;
@@ -826,11 +828,11 @@ class _AddProductFormState extends State<AddProductForm> {
 
   List<DropdownMenuItem<String>> get dropdownRate {
     List<DropdownMenuItem<String>> menuItems = [
-      DropdownMenuItem(child: Text("5"), value: "5"),
-      DropdownMenuItem(child: Text("4"), value: "4"),
-      DropdownMenuItem(child: Text("3"), value: "3"),
-      DropdownMenuItem(child: Text("2"), value: "2"),
-      DropdownMenuItem(child: Text("1"), value: "1"),
+      const DropdownMenuItem(value: "5", child: Text("5")),
+      const DropdownMenuItem(value: "4", child: Text("4")),
+      const DropdownMenuItem(value: "3", child: Text("3")),
+      const DropdownMenuItem(value: "2", child: Text("2")),
+      const DropdownMenuItem(value: "1", child: Text("1")),
     ];
     return menuItems;
   }

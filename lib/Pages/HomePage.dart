@@ -11,6 +11,7 @@ class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _HomePageState createState() => _HomePageState();
 }
 
@@ -62,7 +63,7 @@ class _HomePageState extends State<HomePage> {
                     /*Search Section*/
                     Container(
                       margin:
-                      const EdgeInsets.only(top: 48, right: 24, left: 24),
+                          const EdgeInsets.only(top: 48, right: 24, left: 24),
                       child: TextField(
                         decoration: InputDecoration(
                           fillColor: Colors.white,
@@ -70,13 +71,13 @@ class _HomePageState extends State<HomePage> {
                           enabledBorder: CustomBorder.enabledBorder.copyWith(
                               borderSide: const BorderSide(color: Colors.white),
                               borderRadius:
-                              const BorderRadius.all(Radius.circular(24))),
+                                  const BorderRadius.all(Radius.circular(24))),
                           contentPadding: const EdgeInsets.only(
                               top: 16, left: 12, right: 12, bottom: 8),
                           border: CustomBorder.enabledBorder.copyWith(
                               borderSide: const BorderSide(color: Colors.white),
                               borderRadius:
-                              const BorderRadius.all(Radius.circular(24))),
+                                  const BorderRadius.all(Radius.circular(24))),
                           enabled: false,
                           filled: true,
                         ),
@@ -106,7 +107,7 @@ class _HomePageState extends State<HomePage> {
                 Utils.getSizedBox(height: 30),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(context).push( MaterialPageRoute(
+                    Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const SeeAllProductPage()));
                   },
                   child: Row(
@@ -206,7 +207,7 @@ class _HomePageState extends State<HomePage> {
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(14)),
             image:
-            DecorationImage(image: AssetImage(image), fit: BoxFit.cover)),
+                DecorationImage(image: AssetImage(image), fit: BoxFit.cover)),
       ),
     );
   }
@@ -222,8 +223,8 @@ class _HomePageState extends State<HomePage> {
     }
     return Container(
       margin: EdgeInsets.only(left: leftMargin, right: rightMargin),
-      decoration:
-      const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(8))),
+      decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(8))),
       child: Column(
         children: <Widget>[
           Expanded(

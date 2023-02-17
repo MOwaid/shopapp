@@ -36,11 +36,20 @@ class _ProductCard extends State<ProductCard> {
   @override
   void initState() {
     super.initState();
+    xproduct = SuperProduct(product, _imageFile);
+    loadAllImages();
   }
 
   loadAllImages() async {
-    for (var i = 0; i < product.images.length; i++) {
-      await loadImage(product.images[i], i);
+    if (product.images.length > xproduct!.chacheFiles.length) {
+      for (var i = 0; i < product.images.length; i++) {
+        await loadImage(product.images[i], i);
+      }
+    } else {
+      xproduct!.chacheFiles.clear();
+      for (var i = 0; i < product.images.length; i++) {
+        await loadImage(product.images[i], i);
+      }
     }
   }
 
@@ -84,7 +93,6 @@ class _ProductCard extends State<ProductCard> {
   }
 
   Widget imageloading() {
-    loadImage(product.images[0], 0);
     if (xproduct!.chacheFiles.isEmpty) {
       return const CircularProgressIndicator();
     } else {
@@ -94,9 +102,6 @@ class _ProductCard extends State<ProductCard> {
 
   @override
   Widget build(BuildContext context) {
-    xproduct = SuperProduct(product, _imageFile);
-    loadAllImages();
-
     return Padding(
       padding: EdgeInsets.only(left: getProportionateScreenWidth(20)),
       child: SizedBox(
@@ -135,9 +140,9 @@ class _ProductCard extends State<ProductCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "\$${product.variation[0].price}",
+                    "Rs:${product.variation[0].price}",
                     style: TextStyle(
-                      fontSize: getProportionateScreenWidth(18),
+                      fontSize: getProportionateScreenWidth(16),
                       fontWeight: FontWeight.w600,
                       color: kPrimaryColor,
                     ),

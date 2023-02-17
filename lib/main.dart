@@ -6,13 +6,9 @@ import 'package:shopapp/routes.dart';
 import 'package:shopapp/screens/splash/splash_screen.dart';
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:shopapp/Models/Product.dart';
+
 import 'Models/currentUser.dart';
 import 'firebase_options.dart';
-
-import 'package:path/path.dart' as path;
-import 'package:image_picker/image_picker.dart';
 
 import 'login.dart';
 
