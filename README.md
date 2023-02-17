@@ -1,16 +1,20 @@
 # shopapp
 
-A new Flutter project.
+A full Ecomerce mobile App - This app is build for small shops and business. This is need not much training to use and a person can easly make his / her own online 
+Store as this app is dynamic and change user interface at run time if client or admin so the app owner can add product int the same app as the client use the same 
+app to buy the product. this app use firebase for notification and store all the product images in firebase storage but app only download the images if shareprefernces 
+notified that the new product or image is changed or price etc.. for database this app use cloud MongoDB cluster and performe all CRUD operations. I used profilers to monitor and sections the Widgets Build, avoid useState and iniStates plus layers and Lazy Grids as much as possible to optumize the performace of the application 
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+This project is a bit complex code at the moment working to clean the code use MVVM and MVC have not implimented any TDD/Unit test but will do sone in next few updates
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Resources used in the project are 
+1- Fluster SDk 2.0.2
+2- Firebase Cli
+3- Firebase Storage
+4- MongoDB
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Please feel free to contact me if you need any help or support regarding flutter development 
+m_owaid@hotmail.com
+
