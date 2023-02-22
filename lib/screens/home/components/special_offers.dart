@@ -1,6 +1,12 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+
+import '../../../Models/Product.dart';
 import '../../../utils/size_config.dart';
+import '../../details/details_screen.dart';
 import 'section_title.dart';
 
 class SpecialOffers extends StatelessWidget {
@@ -10,6 +16,10 @@ class SpecialOffers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Product> filteredItems = demoProducts
+        .where((element) => element.cat == "Offers" || element.cat == "Deals")
+        .toList();
+
     return Column(
       children: [
         Padding(
@@ -26,17 +36,29 @@ class SpecialOffers extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              SpecialOfferCard(
-                image: "assets/images/Image Banner 2.png",
-                category: "Pizza",
-                numOfBrands: 4,
-                press: () {},
-              ),
-              SpecialOfferCard(
-                image: "assets/images/Image Banner 3.png",
-                category: "Burger",
-                numOfBrands: 5,
-                press: () {},
+              ...List.generate(
+                filteredItems.length,
+                (index) {
+                  if (filteredItems[index].isOffer) {
+                    return SpecialOfferCard(
+                      category: filteredItems[index].title,
+                      product: filteredItems[index],
+                      numOfBrands: 1,
+                      press: () {},
+                    );
+                  }
+                  if (filteredItems[index].isDeal) {
+                    return SpecialOfferCard(
+                      category: filteredItems[index].title,
+                      product: filteredItems[index],
+                      numOfBrands: 1,
+                      press: () {},
+                    );
+                  }
+
+                  return const SizedBox
+                      .shrink(); // here by default width and height is 0
+                },
               ),
               SizedBox(width: getProportionateScreenWidth(10)),
             ],
@@ -47,25 +69,122 @@ class SpecialOffers extends StatelessWidget {
   }
 }
 
-class SpecialOfferCard extends StatelessWidget {
-  const SpecialOfferCard({
-    Key? key,
-    required this.category,
-    required this.image,
-    required this.numOfBrands,
-    required this.press,
-  }) : super(key: key);
-
-  final String category, image;
+class SpecialOfferCard extends StatefulWidget {
+  final Product product;
+  final String category;
   final int numOfBrands;
   final GestureTapCallback press;
+
+  const SpecialOfferCard(
+      {super.key,
+      required this.product,
+      required this.category,
+      required this.numOfBrands,
+      required this.press});
+
+  @override
+  // ignore: no_logic_in_create_state
+  _SpecialOfferCard createState() => _SpecialOfferCard(
+      category: category,
+      product: product,
+      numOfBrands: numOfBrands,
+      press: press);
+}
+
+class _SpecialOfferCard extends State<SpecialOfferCard> {
+  _SpecialOfferCard({
+    Key? key,
+    required this.category,
+    required this.numOfBrands,
+    required this.product,
+    required this.press,
+  });
+
+  final Product product;
+  final List<File> _imageFile = <File>[];
+  final String category;
+  final int numOfBrands;
+  final GestureTapCallback press;
+
+  SuperProduct? xproduct;
+
+  @override
+  void initState() {
+    super.initState();
+    xproduct = SuperProduct(product, _imageFile);
+    loadImage(product.images[0], 0);
+  }
+
+  /*loadAllImages() async {
+    if (product.images.length > xproduct!.chacheFiles.length) {
+      for (var i = 0; i < product.images.length; i++) {
+        await loadImage(product.images[i], i);
+      }
+    } else {
+      xproduct!.chacheFiles.clear();
+      for (var i = 0; i < product.images.length; i++) {
+        await loadImage(product.images[i], i);
+      }
+    }
+  }
+*/
+  Future loadImage(String imagename, int fileindex) async {
+    final Directory temp = await getTemporaryDirectory();
+    final File imageFile = File('${temp.path}/images/$imagename');
+
+    if (await imageFile.exists()) {
+      setState(() {
+        xproduct!.chacheFiles.add(imageFile);
+      });
+    } else {
+      // Image doesn't exist in cache
+      await imageFile.create(recursive: true);
+      final firefile = FirebaseStorage.instance.ref().child(imagename);
+// no need of the file extension, the name will do fine.
+      final downloadTask = firefile.writeToFile(imageFile);
+      downloadTask.snapshotEvents.listen((taskSnapshot) {
+        switch (taskSnapshot.state) {
+          case TaskState.running:
+            // TODO: Handle this case.
+            break;
+          case TaskState.paused:
+            // TODO: Handle this case.
+            break;
+          case TaskState.success:
+            break;
+          case TaskState.canceled:
+            // TODO: Handle this case.
+            break;
+          case TaskState.error:
+            // TODO: Handle this case.
+            break;
+        }
+      });
+
+      setState(() {
+        xproduct!.chacheFiles.add(imageFile);
+      });
+    }
+  }
+
+  Widget imageloading() {
+    if (xproduct!.chacheFiles.isEmpty) {
+      return const CircularProgressIndicator();
+    } else {
+      return Image.file(xproduct!.chacheFiles[0]);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(left: getProportionateScreenWidth(20)),
       child: GestureDetector(
-        onTap: press,
+        onTap: () => Navigator.pushNamed(
+          context,
+          DetailsScreen.routeName,
+          arguments: ProductDetailsArguments(product: xproduct!),
+        ),
         child: SizedBox(
           width: getProportionateScreenWidth(242),
           height: getProportionateScreenWidth(100),
@@ -73,10 +192,7 @@ class SpecialOfferCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             child: Stack(
               children: [
-                Image.asset(
-                  image,
-                  fit: BoxFit.cover,
-                ),
+                imageloading(),
                 Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(

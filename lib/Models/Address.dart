@@ -11,8 +11,8 @@ class Address {
   final String state;
   final String country;
   String postcode = 'Unknow';
-  String latitude = '0.00';
-  String longitude = '0.00';
+  double latitude = 0.00;
+  double longitude = 0.00;
   bool defaultAddress = true;
 
   Address(
@@ -24,8 +24,8 @@ class Address {
       required this.country,
       this.streetline2 = 'Unknown',
       this.postcode = '000000',
-      this.latitude = '0.00',
-      this.longitude = '0.00',
+      this.latitude = 0.00,
+      this.longitude = 0.00,
       this.defaultAddress = true});
 
 // Code
@@ -56,5 +56,5 @@ class Address {
         postcode = map['postcode'],
         latitude = map['latitude'],
         longitude = map['longitude'],
-        defaultAddress = map['defaultAddress'];
+        defaultAddress = map['defaultAddress'] ?? false;
 }

@@ -7,6 +7,7 @@ const MONGO_CONN_URL =
 // ignore: constant_identifier_names
 const USER_COLLECTION = "users";
 const PRODUCT_COLLECTION = "products";
+const ORDER_COLLECTION = "Orders";
 // ignore: constant_identifier_names
 const USER_CART = "Cart";
 
@@ -29,6 +30,12 @@ final headingStyle = TextStyle(
   height: 1.5,
 );
 
+final headingStyle1 = TextStyle(
+  fontSize: getProportionateScreenWidth(22),
+  fontWeight: FontWeight.bold,
+  color: Colors.black,
+  height: 1.4,
+);
 const defaultDuration = Duration(milliseconds: 250);
 
 // Form Error

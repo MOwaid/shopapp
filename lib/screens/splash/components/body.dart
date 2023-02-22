@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopapp/Models/DBHelper.dart';
 import 'package:shopapp/Models/currentUser.dart';
 import 'package:shopapp/screens/home/home_screen.dart';
 import 'package:shopapp/utils/constants.dart';
@@ -73,10 +74,14 @@ class _BodyState extends State<Body> {
                     const Spacer(flex: 3),
                     DefaultButton(
                       text: "Continue",
-                      press: () {
-                        if (CurrentUser.getuserID != "NA") {
+                      press: () async {
+                        // ignore: unrelated_type_equality_checks
+                        if (await DBHelper.finduser(CurrentUser.getuserID!) ==
+                            true) {
+                          // ignore: use_build_context_synchronously
                           Navigator.pushNamed(context, HomeScreen.routeName);
                         } else {
+                          // ignore: use_build_context_synchronously
                           Navigator.pushNamed(context, SignInScreen.routeName);
                         }
                       },

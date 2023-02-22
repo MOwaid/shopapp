@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../Models/Cart.dart';
+import '../../Models/Product.dart';
 import 'components/body.dart';
 import 'components/check_out_card.dart';
 
@@ -13,7 +15,7 @@ class CartScreen extends StatelessWidget {
     return Scaffold(
       appBar: buildAppBar(context),
       body: const Body(),
-      bottomNavigationBar: const CheckoutCard(),
+      bottomNavigationBar: CheckoutCard(),
     );
   }
 
@@ -26,7 +28,7 @@ class CartScreen extends StatelessWidget {
             style: TextStyle(color: Colors.black),
           ),
           Text(
-            "${demoCarts.length} items",
+            "${Provider.of<CartOne>(context, listen: true).items.length} items",
             style: Theme.of(context).textTheme.caption,
           ),
         ],

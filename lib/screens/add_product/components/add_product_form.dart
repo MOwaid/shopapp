@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:image_picker/image_picker.dart';
-import 'package:shopapp/components/custom_surfix_icon.dart';
+
 import 'package:shopapp/components/default_button.dart';
 import 'package:mongo_dart/mongo_dart.dart' as M;
 import 'package:shopapp/components/form_error.dart';
@@ -36,9 +36,12 @@ class _AddProductFormState extends State<AddProductForm> {
   String? dob;
   String? phoneNumber;
   String? address;
-  String _selectedValue = "Pizza";
+  String _selectedValue = "Pizza's";
   String _selectedrate = "5";
   bool _termsChecked = false;
+  bool isOffer = false;
+  bool isDeal = false;
+  bool isAvailable = false;
 
   var _limitvariation = 5;
 
@@ -271,31 +274,8 @@ class _AddProductFormState extends State<AddProductForm> {
                   chooseImage('gallery');
                 },
               ),
-              /* IconButton(
-              icon: const Icon(Icons.remove_circle),
-              onPressed: () {
-                removeItemToList(listindex);
-              },
-            ),*/
             ))
           ]),
-
-          /*     SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: Image(
-                image: NetworkImage(imageUrl),
-                errorBuilder: (context, object, stacktrace) =>
-                    const Text("No Image URL"),
-              )
-
-              FadeInImage(
-                placeholder: const AssetImage('assets/images/splash_1.png'),
-                image: NetworkImage(_newsImage),
-                fit: BoxFit.cover,
-                height: 250.0,
-              ),
-
-              ),*/
           SizedBox(height: getProportionateScreenHeight(20)),
           buildTitleFormField(),
           SizedBox(height: getProportionateScreenHeight(5)),
@@ -667,36 +647,6 @@ class _AddProductFormState extends State<AddProductForm> {
     );
   }
 
-  /* TextFormField buildpriceFormField() {
-    return TextFormField(
-      controller: priceController,
-      keyboardType: TextInputType.phone,
-      onSaved: (newValue) => priceController.text = newValue!,
-      decoration: const InputDecoration(
-        labelText: "Product Price",
-        hintText: "Enter your product Price.",
-
-        // If  you are using latest version of flutter then lable text and hint text shown like this
-        // if you r using flutter less then 1.20.* then maybe this is not working properly
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: Icon(Icons.price_change),
-      ),
-      onChanged: (value) {
-        if (value.isNotEmpty) {
-          removeError(error: kpricehNullError);
-        }
-        return;
-      },
-      validator: (value) {
-        if (value!.isEmpty) {
-          addError(error: kpricehNullError);
-          return "";
-        }
-        return null;
-      },
-    );
-  }
-*/
   DropdownButtonFormField buildSizeDropdownFormField() {
     return DropdownButtonFormField(
         validator: (value) => value == null ? "Select Catagory" : null,
@@ -775,52 +725,19 @@ class _AddProductFormState extends State<AddProductForm> {
         items: dropdownRate);
   }
 
-  /* insertUser(User userDB) async {
-    final Address adr = Address(
-        id: M.ObjectId(),
-        houseNo: '00',
-        streetline1: addressController.text,
-        city: 'Karachi',
-        state: 'Sindh',
-        country: 'Pakistan');
-
-    final User u = User(
-        id: M.ObjectId(),
-        userID: userDB.userID,
-        name: nameController.text,
-        password: userDB.password,
-        passhint: userDB.passhint,
-        address: adr,
-        email: userDB.email,
-        dob: dob!,
-        mobileno1: userDB.mobileno1,
-        mobileno2: '00923343441685');
-
-    final bool result = await DBHelper.insert(u);
-    if (result == true) {
-      // ignore: use_build_context_synchronously
-      Navigator.pushNamed(context, LoginSuccessScreen.routeName);
-    } else {
-      // ignore: use_build_context_synchronously
-      showAlertDialog(
-          context, "User Exist", "User already exist with this number!");
-    }
-    // ignore: use_build_context_synchronously
-  }*/
-
   List<DropdownMenuItem<String>> get dropdownItems {
     List<DropdownMenuItem<String>> menuItems = [
-      const DropdownMenuItem(value: "Burgers", child: Text("Burger")),
-      const DropdownMenuItem(value: "Pizza", child: Text("Pizza")),
+      const DropdownMenuItem(value: "Burger's", child: Text("Burger's")),
+      const DropdownMenuItem(value: "Pizza's", child: Text("Pizza's")),
       const DropdownMenuItem(value: "Wings", child: Text("Wings")),
-      const DropdownMenuItem(value: "Hot Shots", child: Text("Hot Shots")),
-      const DropdownMenuItem(
-          value: "Fried Platter", child: Text("Fried Platter")),
-      const DropdownMenuItem(
-          value: "Loaded Fries", child: Text("Loaded Fries")),
-      const DropdownMenuItem(value: "Beverages", child: Text("Beverages")),
+      const DropdownMenuItem(value: "HotShots", child: Text("HotShots")),
+      const DropdownMenuItem(value: "Platter", child: Text("Fried Platter")),
+      const DropdownMenuItem(value: "Fries", child: Text("Loaded Fries")),
+      const DropdownMenuItem(value: "Drinks", child: Text("Beverages")),
       const DropdownMenuItem(value: "Deals", child: Text("Deals")),
-      const DropdownMenuItem(value: "Parathas", child: Text("Parathas")),
+      const DropdownMenuItem(value: "Paratha's", child: Text("Paratha's")),
+      const DropdownMenuItem(value: "Offers", child: Text("Offers")),
+      const DropdownMenuItem(value: "Papolar", child: Text("Papolar")),
     ];
 
     return menuItems;
@@ -941,11 +858,19 @@ class _AddProductFormState extends State<AddProductForm> {
     }
     if (titleController.text.isEmpty ||
         discController.text.isEmpty ||
+        _selectedValue.isEmpty ||
         ratingController.text.isEmpty) {
       showAlertDialog(context, "Add title",
           "Please add product title and descriptionto continue!");
 
       return false;
+    } else {
+      if (_selectedValue == "Offers") {
+        isOffer = true;
+      }
+      if (_selectedValue == "Deals") {
+        isDeal = true;
+      }
     }
 
     return true;
@@ -956,7 +881,6 @@ class _AddProductFormState extends State<AddProductForm> {
       return;
     }
 
-    final List<ProductVariation> variations = [];
     final List<String> imglist = [];
 
     String filename = "";
@@ -978,8 +902,12 @@ class _AddProductFormState extends State<AddProductForm> {
         rating: double.parse(ratingController.text),
         isFavourite: true,
         isPopular: true,
+        isOffer: isOffer,
+        isDeal: isDeal,
+        isAvailable: isAvailable,
         title: titleController.text,
-        description: discController.text);
+        description: discController.text,
+        cat: _selectedValue);
 
     final bool result = await DBHelper.insertProduct(newProduct);
     if (result == true) {

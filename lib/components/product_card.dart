@@ -37,10 +37,10 @@ class _ProductCard extends State<ProductCard> {
   void initState() {
     super.initState();
     xproduct = SuperProduct(product, _imageFile);
-    loadAllImages();
+    loadImage(product.images[0], 0);
   }
 
-  loadAllImages() async {
+  /*loadAllImages() async {
     if (product.images.length > xproduct!.chacheFiles.length) {
       for (var i = 0; i < product.images.length; i++) {
         await loadImage(product.images[i], i);
@@ -52,7 +52,7 @@ class _ProductCard extends State<ProductCard> {
       }
     }
   }
-
+*/
   Future loadImage(String imagename, int fileindex) async {
     final Directory temp = await getTemporaryDirectory();
     final File imageFile = File('${temp.path}/images/$imagename');

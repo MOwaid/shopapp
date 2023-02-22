@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:shopapp/components/default_button.dart';
 
 import '../../../utils/constants.dart';
 import '../../../utils/size_config.dart';
+import '../../../Models/Cart.dart';
 
 class CheckoutCard extends StatelessWidget {
-  const CheckoutCard({
+  CheckoutCard({
     Key? key,
   }) : super(key: key);
 
+  double total = 0.00;
   @override
   Widget build(BuildContext context) {
+    Provider.of<CartOne>(context, listen: true).items.forEach(
+        (element) => total = total + (element.productPrice * element.quantity));
+
     return Container(
       padding: EdgeInsets.symmetric(
         vertical: getProportionateScreenWidth(15),
@@ -63,13 +69,14 @@ class CheckoutCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text.rich(
+                Text.rich(
                   TextSpan(
                     text: "Total:\n",
                     children: [
                       TextSpan(
-                        text: "\$337.15",
-                        style: TextStyle(fontSize: 16, color: Colors.black),
+                        text: "Rs: $total/-",
+                        style:
+                            const TextStyle(fontSize: 16, color: Colors.black),
                       ),
                     ],
                   ),

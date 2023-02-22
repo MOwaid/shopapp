@@ -18,12 +18,6 @@ class ShopProvider with ChangeNotifier {
 
   List<CartOne> cart = [];
 
-  Future<List<CartOne>> getData() async {
-    cart = await dbHelper.getCartList();
-    notifyListeners();
-    return cart;
-  }
-
   void _setPrefsItems() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt('cart_items', _counter);
@@ -58,8 +52,8 @@ class ShopProvider with ChangeNotifier {
 
   void addQuantity(int id) {
     // ignore: unrelated_type_equality_checks
-    final index = cart.indexWhere((element) => element.id == id);
-    cart[index].quantity!.value = cart[index].quantity!.value + 1;
+    /* final index = cart.indexWhere((element) => element.id == id);
+    cart[index].totalQuantity? = cart[index].quantity!.value + 1;*/
     _setPrefsItems();
     notifyListeners();
   }
@@ -67,11 +61,11 @@ class ShopProvider with ChangeNotifier {
   void deleteQuantity(int id) {
     // ignore: unrelated_type_equality_checks
     final index = cart.indexWhere((element) => element.id == id);
-    final currentQuantity = cart[index].quantity!.value;
+    const currentQuantity = 1; // = cart[index].quantity!.value;
     if (currentQuantity <= 1) {
       currentQuantity == 1;
     } else {
-      cart[index].quantity!.value = currentQuantity - 1;
+      //   cart[index].quantity!.value = currentQuantity - 1;
     }
     _setPrefsItems();
     notifyListeners();
