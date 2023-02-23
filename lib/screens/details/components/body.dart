@@ -66,6 +66,7 @@ class Body extends StatelessWidget {
                             Provider.of<CartOne>(context, listen: false)
                                 .items
                                 .add(newitem);
+                            //invoke changes
                             Provider.of<CartOne>(context, listen: false)
                                 .itemAdd();
                           },
