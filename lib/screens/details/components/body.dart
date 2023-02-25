@@ -69,6 +69,7 @@ class Body extends StatelessWidget {
                             //invoke changes
                             Provider.of<CartOne>(context, listen: false)
                                 .itemAdd();
+                            Navigator.pop(context);
                           },
                         ),
                       ),

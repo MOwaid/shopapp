@@ -22,15 +22,40 @@ class CartScreen extends StatelessWidget {
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
       title: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          const Text(
-            "Your Cart",
-            style: TextStyle(color: Colors.black),
-          ),
-          Text(
-            "${Provider.of<CartOne>(context, listen: true).items.length} items",
-            style: Theme.of(context).textTheme.caption,
-          ),
+          Row(children: [
+            const SizedBox(
+              width: 50,
+              child: Text(
+                "Cart -",
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+            const SizedBox(width: 10),
+            SizedBox(
+              width: 88,
+              child: Text(
+                "${Provider.of<CartOne>(context, listen: true).items.length} items",
+                style: const TextStyle(color: Colors.white, fontSize: 18),
+              ),
+            )
+          ]),
+          const SizedBox(height: 7),
+          Row(children: const [
+            Icon(
+              Icons.swipe_left,
+              size: 20.0,
+              color: Colors.white,
+            ),
+            SizedBox(
+              width: 200,
+              child: Text(
+                "   Swipe left to remove items",
+                style: TextStyle(color: Colors.yellow, fontSize: 14),
+              ),
+            )
+          ]),
         ],
       ),
     );

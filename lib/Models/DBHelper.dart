@@ -32,6 +32,7 @@ class DBHelper {
     await db.open();
     userCollection = db.collection(USER_COLLECTION);
     productcollection = db.collection(PRODUCT_COLLECTION);
+    userOrders = db.collection(ORDER_COLLECTION);
   }
 
   static Future<List<Map<String, dynamic>>> getDocuments() async {
@@ -55,6 +56,48 @@ class DBHelper {
       });
 
       return products;
+    } catch (e) {
+      print(e);
+      return Future.value(e as FutureOr<List<Map<String, dynamic>>>?);
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>> getuserOrders(String uID) async {
+    DateTime newdate(int days) {
+      DateTime currentdate = DateTime.now();
+      return DateTime(
+          currentdate.year, currentdate.month, currentdate.day - days);
+    }
+
+    try {
+      final orders = await userOrders.find({
+        'userID': uID,
+        'orderStatus': 4,
+        'orderdate': {'\$gte': newdate(7)}
+      }).toList();
+      userorders.clear();
+
+      orders.forEach((element) {
+//------------------------here we converting json string to map object-------
+
+        CartOne ma = CartOne.fromMap(element);
+        userorders.add(ma);
+      });
+
+      useropenorders.clear();
+      final ordersOpen = await userOrders.find({
+        'userID': uID,
+        'orderStatus': {'\$ne': 4}
+      }).toList();
+
+      ordersOpen.forEach((element) {
+//------------------------here we converting json string to map object-------
+
+        CartOne ma = CartOne.fromMap(element);
+        useropenorders.add(ma);
+      });
+
+      return orders;
     } catch (e) {
       print(e);
       return Future.value(e as FutureOr<List<Map<String, dynamic>>>?);
@@ -131,19 +174,24 @@ class DBHelper {
     }
   }
 
-  static update(User user) async {
-    var u = await userCollection.findOne({"_id": user.id});
-    u["name"] = user.name;
-    u["userID"] = user.userID;
-    u["password"] = user.password;
-    u["passhint"] = user.passhint;
-    u["address"] = user.address;
-    u["email"] = user.email;
-    u["dob"] = user.dob;
-    u["mobileno1"] = user.mobileno1;
-    u["mobileno2"] = user.mobileno1;
+  static Future<bool> update(User user) async {
+    try {
+      var u = await userCollection.findOne({"userID": user.userID});
+      u["name"] = user.name;
+      u["userID"] = user.userID;
+      u["password"] = user.password;
+      u["passhint"] = user.passhint;
+      u["address"] = user.address.toMap();
+      u["email"] = user.email;
+      u["dob"] = user.dob;
+      u["mobileno1"] = user.mobileno1;
+      u["mobileno2"] = user.mobileno1;
 
-    await userCollection.save(u);
+      await userCollection.save(u);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   static delete(User user) async {
@@ -151,10 +199,13 @@ class DBHelper {
   }
 
   // inserting data into the table
-  static Future<CartOne> insertCart(CartOne cart) async {
-    await userOrders.insertAll([cart.toMap()]);
-
-    return cart;
+  static Future<bool> insertCart(CartOne cart) async {
+    try {
+      await userOrders.insertAll([cart.toMap()]);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 // getting all the items in the list from the database
 

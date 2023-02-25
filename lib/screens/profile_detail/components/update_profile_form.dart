@@ -3,7 +3,7 @@ import 'package:shopapp/components/custom_surfix_icon.dart';
 import 'package:shopapp/components/default_button.dart';
 import 'package:mongo_dart/mongo_dart.dart' as M;
 import 'package:shopapp/components/form_error.dart';
-import 'package:shopapp/screens/otp/otp_screen.dart';
+
 import 'package:intl/intl.dart';
 import '../../../Models/Address.dart';
 import '../../../Models/DBHelper.dart';
@@ -14,22 +14,23 @@ import '../../../utils/Constants.dart';
 import '../../../utils/size_config.dart';
 import '../../login_success/login_success_screen.dart';
 
-class CompleteProfileForm extends StatefulWidget {
-  const CompleteProfileForm({super.key});
+class UpdateProfileForm extends StatefulWidget {
+  const UpdateProfileForm({super.key});
 
   @override
   // ignore: no_logic_in_create_state
-  _CompleteProfileFormState createState() => _CompleteProfileFormState();
+  _UpdateProfileFormState createState() => _UpdateProfileFormState();
 }
 
-class _CompleteProfileFormState extends State<CompleteProfileForm> {
-  _CompleteProfileFormState();
+class _UpdateProfileFormState extends State<UpdateProfileForm> {
+  _UpdateProfileFormState();
   final _formKey = GlobalKey<FormState>();
   final List<String?> errors = [];
   String? firstName;
   String? dob;
   String? phoneNumber;
   String? address;
+  bool change = false;
 
   TextEditingController dobController = TextEditingController();
   TextEditingController nameController = TextEditingController();
@@ -43,6 +44,17 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
     nameController.dispose();
     addressController.dispose();
     phoneController.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    //pVar.add(vp);
+
+    nameController.text = DBHelper.currentUser.name;
+    phoneController.text = DBHelper.currentUser.mobileno1;
+    addressController.text = DBHelper.currentUser.address.streetline1;
+    dobController.text = DBHelper.currentUser.dob;
   }
 
   void addError({String? error}) {
@@ -63,7 +75,7 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
 
   @override
   Widget build(BuildContext context) {
-    final User? user = ModalRoute.of(context)?.settings.arguments as User?;
+    final User user = DBHelper.currentUser;
     return Form(
       key: _formKey,
       child: Column(
@@ -81,7 +93,11 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
             text: "continue",
             press: () {
               if (_formKey.currentState!.validate()) {
-                insertUser(user!);
+                if (change == true) {
+                  updatetUser(user);
+                } else {
+                  Navigator.pop(context);
+                }
                 // Navigator.pushNamed(context, OtpScreen.routeName);
               }
             },
@@ -99,6 +115,8 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
         if (value.isNotEmpty) {
           removeError(error: kAddressNullError);
         }
+        change = true;
+
         return;
       },
       validator: (value) {
@@ -129,6 +147,8 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
         if (value.isNotEmpty) {
           removeError(error: kPhoneNumberNullError);
         }
+        change = true;
+
         return;
       },
       validator: (value) {
@@ -166,7 +186,9 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
       onChanged: (value) {
         if (value.isNotEmpty) {
           dob = value;
+          dobController.text = value;
         }
+        change = true;
         return;
       },
       onTap: () async {
@@ -183,7 +205,9 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
           dob = formattedDate; //set output date to TextField value.
           dobController.text = formattedDate;
 
-          setState(() {});
+          setState(() {
+            change = true;
+          });
         } else {}
       },
     );
@@ -197,6 +221,8 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
         if (value.isNotEmpty) {
           removeError(error: kNamelNullError);
         }
+        change = true;
+
         return;
       },
       validator: (value) {
@@ -217,7 +243,7 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
     );
   }
 
-  insertUser(User userDB) async {
+  updatetUser(User userDB) async {
     final Address adr = Address(
         id: M.ObjectId(),
         houseNo: '00',
@@ -234,23 +260,26 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
         passhint: userDB.passhint,
         address: adr,
         email: userDB.email,
-        dob: dob!,
+        dob: dobController.text,
         mobileno1: userDB.mobileno1,
         mobileno2: '00923343441685');
 
-    final bool result = await DBHelper.insert(u);
+    final bool result = await DBHelper.update(u);
     if (result == true) {
       // ignore: use_build_context_synchronously
       Navigator.pushNamed(context, LoginSuccessScreen.routeName,
           arguments: PageArguments(
-              message: "Successfully Added",
-              buttonlabel: "Back to Login",
-              perviousPagename: "Added"));
+              message: "Profile updated!",
+              buttonlabel: "Close",
+              perviousPagename: "update"));
 
-//      Navigator.pushNamed(context, LoginSuccessScreen.routeName);
+      //Navigator.pushNamed(context, LoginSuccessScreen.routeName);
     } else {
-      showAlertDialog(
-          context, "User Exist", "User already exist with this number!");
+      // ignore: use_build_context_synchronously
+      showAlertDialog(context, "Update Error",
+          "Unable to update user data please try again later!");
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
     }
     // ignore: use_build_context_synchronously
   }

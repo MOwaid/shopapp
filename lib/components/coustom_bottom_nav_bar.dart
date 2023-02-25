@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shopapp/screens/add_product/add_product_screen.dart';
+
 import 'package:shopapp/screens/home/home_screen.dart';
+import 'package:shopapp/screens/orders_tab/order_tab_screen.dart';
 import 'package:shopapp/screens/profile/profile_screen.dart';
 
 import '../utils/constants.dart';
@@ -59,7 +60,8 @@ class CustomBottomNavBar extends StatelessWidget {
                       : inActiveIconColor,
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(context, AddProductScreen.routeName);
+                  Navigator.pushNamed(context, OrdertabScreen.routeName);
+                  // Navigator.pushNamed(context, AddProductScreen.routeName);
                 },
               ),
               IconButton(

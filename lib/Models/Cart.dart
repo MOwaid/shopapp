@@ -29,7 +29,7 @@ class Cartitem {
       required this.image});
 
   Cartitem.fromMap(Map<String, dynamic> map)
-      : id = map['id'],
+      : id = map['_id'],
         productId = map['productId'],
         productName = map['productName'],
         productExtra = map['productExtra'],
@@ -40,7 +40,7 @@ class Cartitem {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      '_id': id,
       'productId': productId,
       'productName': productName,
       'productExtra': productExtra,
@@ -53,22 +53,23 @@ class Cartitem {
 }
 
 class CartOne with ChangeNotifier {
-  final ObjectId id;
-  late final int totalQuantity;
-  final double totalPrice;
+  ObjectId id;
+  int totalQuantity;
+  double totalPrice;
   final List<Cartitem> items;
-  final double vat;
-  final double posCharges;
-  final String orderdate;
+  double vat;
+  double posCharges;
+  DateTime orderdate;
   final String userID;
   final String username;
   final String userAddress;
-  final double Alatitude;
-  final double Alongitude;
-  final int orderStatus;
-  final String riderID;
-  final String managerID;
+  double Alatitude;
+  double Alongitude;
+  int orderStatus;
+  String riderID;
+  String managerID;
   int itemcount = 0;
+  String note;
 
   CartOne(
       {required this.id,
@@ -85,7 +86,8 @@ class CartOne with ChangeNotifier {
       required this.Alongitude,
       required this.orderStatus,
       required this.riderID,
-      required this.managerID});
+      required this.managerID,
+      required this.note});
 
   List<Map<String, Object>> toitemsMap() {
     return items.map((e) {
@@ -103,7 +105,7 @@ class CartOne with ChangeNotifier {
   }
 
   CartOne.fromMap(Map<dynamic, dynamic> map)
-      : id = map['id'],
+      : id = map['_id'],
         totalQuantity = map['totalQuantity'],
         totalPrice = map['totalPrice'],
         items = (map['items'] as List)
@@ -119,11 +121,12 @@ class CartOne with ChangeNotifier {
         Alongitude = map['Alongitude'],
         orderStatus = map['orderStatus'],
         riderID = map['riderID'],
-        managerID = map['managerID'];
+        managerID = map['managerID'],
+        note = map['note'];
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      '_id': id,
       'totalQuantity': totalQuantity,
       'totalPrice': totalPrice,
       'items': toitemsMap(),
@@ -138,6 +141,7 @@ class CartOne with ChangeNotifier {
       'orderStatus': orderStatus,
       'riderID': riderID,
       'managerID': managerID,
+      'note': note
     };
   }
 
@@ -213,4 +217,5 @@ CartOne userCart = CartOne(
     managerID: "1");
 */
 List<CartOne> userorders = [];
+List<CartOne> useropenorders = [];
 //List<Cartitem> cartItems = [];

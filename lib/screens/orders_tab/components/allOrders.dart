@@ -5,17 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 
-class ProfilePic extends StatefulWidget {
-  const ProfilePic({super.key});
+import '../../../Models/Cart.dart';
+import '../../../utils/size_config.dart';
+import 'order_card.dart';
+
+class AllOrders extends StatefulWidget {
+  const AllOrders({super.key});
 
   @override
   // ignore: no_logic_in_create_state
-  _ProfilePicState createState() => _ProfilePicState();
+  _AllOrdersState createState() => _AllOrdersState();
 }
 
-class _ProfilePicState extends State<ProfilePic> {
-  _ProfilePicState();
+class _AllOrdersState extends State<AllOrders> {
+  _AllOrdersState();
 
   String profilename = "Profile.png";
   String imageUrl = "";
@@ -76,40 +81,43 @@ class _ProfilePicState extends State<ProfilePic> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 115,
-      width: 115,
-      child: Stack(
-        fit: StackFit.expand,
-        clipBehavior: Clip.none,
-        children: [
-          CircleAvatar(
-            backgroundImage:
-                makeimage(), // AssetImage("assets/images/Profile Image.png"),
-          ),
-          Positioned(
-            right: -16,
-            bottom: 0,
-            child: SizedBox(
-              height: 46,
-              width: 46,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50),
-                    side: const BorderSide(color: Colors.white),
-                  ),
-                  backgroundColor: const Color(0xFFF5F6F9),
-                ),
-                onPressed: () {
-                  chooseImage('gallery');
-                },
-                child: SvgPicture.asset("assets/icons/Camera Icon.svg"),
+    return Padding(
+      padding:
+          EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
+      child: ListView.builder(
+        itemCount: Provider.of<CartOne>(context, listen: true).items.length,
+        itemBuilder: (context, index) => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Dismissible(
+            key: Key(Provider.of<CartOne>(context, listen: true)
+                .items[index]
+                .productId
+                .toString()),
+            direction: DismissDirection.endToStart,
+            onDismissed: (direction) {
+              setState(() {
+                Provider.of<CartOne>(context, listen: false)
+                    .items
+                    .removeAt(index);
+                Provider.of<CartOne>(context, listen: false).itemCountChange();
+              });
+            },
+            background: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFE6E6),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Row(
+                children: [
+                  const Spacer(),
+                  SvgPicture.asset("assets/icons/Trash.svg"),
+                ],
               ),
             ),
-          )
-        ],
+            child: OrderCard(cart: userorders[index]),
+          ),
+        ),
       ),
     );
   }

@@ -12,7 +12,6 @@ import 'package:shopapp/components/form_error.dart';
 import '../../../Models/DBHelper.dart';
 import '../../../Models/Product.dart';
 import '../../../Models/ProductVariation.dart';
-import '../../../Models/User.dart';
 
 import '../../../utils/Constants.dart';
 import '../../../utils/size_config.dart';
@@ -229,8 +228,6 @@ class _AddProductFormState extends State<AddProductForm> {
 
   @override
   Widget build(BuildContext context) {
-    final User? user = ModalRoute.of(context)?.settings.arguments as User?;
-
     return Form(
       key: _formKey,
       child: Column(

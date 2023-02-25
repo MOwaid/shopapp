@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shopapp/Models/Cart.dart';
@@ -6,15 +5,13 @@ import 'package:shopapp/Models/DBHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:shopapp/routes.dart';
 import 'package:shopapp/screens/splash/splash_screen.dart';
-import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
-import 'package:shopapp/utils/Constants.dart';
+
 import 'package:mongo_dart/mongo_dart.dart' as M;
 
 import 'Models/currentUser.dart';
 import 'firebase_options.dart';
-
-import 'login.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,7 +44,7 @@ void main() async {
           items: [],
           vat: 0.00,
           posCharges: 0.00,
-          orderdate: "2021-12-15 11:10:01.000",
+          orderdate: DateTime.now(),
           userID: DBHelper.currentUser.userID,
           username: DBHelper.currentUser.name,
           userAddress: DBHelper.currentUser.address.streetline1,
@@ -55,7 +52,8 @@ void main() async {
           Alongitude: DBHelper.currentUser.address.longitude,
           orderStatus: 1,
           riderID: "1",
-          managerID: "1"),
+          managerID: "1",
+          note: "No comments"),
       child: const MyApp(),
     ),
   );
@@ -91,7 +89,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
+/*
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
@@ -199,4 +197,4 @@ class _MyHomePageState extends State<MyHomePage> {
           }
         });
   }
-}
+}*/

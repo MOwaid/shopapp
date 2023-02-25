@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:shopapp/components/default_button.dart';
+import 'package:shopapp/screens/profile_detail/components/update_profile_form.dart';
+
 import 'package:shopapp/utils/size_config.dart';
 
-import '../../../Models/User.dart';
+import '../../../Models/DBHelper.dart';
 import '../../../utils/Constants.dart';
-import '../../profile_detail/components/update_profile_form.dart';
-import 'complete_profile_form.dart';
 
 class Body extends StatelessWidget {
   const Body({super.key});
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -21,13 +21,13 @@ class Body extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(height: SizeConfig.screenHeight * 0.03),
-                Text("Complete Profile", style: headingStyle),
+                Text("Update Profile", style: headingStyle),
                 const Text(
-                  "Complete your details or continue  \nwith social media",
+                  "Update your profile and press continue",
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: SizeConfig.screenHeight * 0.06),
-                const CompleteProfileForm(),
+                const UpdateProfileForm(),
                 SizedBox(height: getProportionateScreenHeight(30)),
                 Text(
                   "By continuing your confirm that you agree \nwith our Term and Condition",
