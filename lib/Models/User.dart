@@ -47,7 +47,7 @@ class User {
         userID = map['userID'],
         password = map['password'],
         passhint = map['passhint'],
-        address = map['address'],
+        address = Address.fromMap(map['address']),
         email = map['email'],
         dob = map['dob'],
         mobileno1 = map['mobileno1'],

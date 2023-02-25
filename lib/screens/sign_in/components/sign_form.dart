@@ -166,7 +166,9 @@ class _SignFormState extends State<SignForm> {
       // ignore: use_build_context_synchronously
       if (remember == true) {
         SharedPreferences pref = await SharedPreferences.getInstance();
-        pref.setString("userID", uname);
+        pref.setString("userID", DBHelper.currentUser.userID);
+        pref.setString("name", DBHelper.currentUser.name);
+        pref.setString("Address", DBHelper.currentUser.address.streetline1);
       }
       Navigator.pushNamed(context, HomeScreen.routeName);
     } else {

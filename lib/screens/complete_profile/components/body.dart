@@ -3,6 +3,7 @@ import 'package:shopapp/utils/size_config.dart';
 
 import '../../../Models/User.dart';
 import '../../../utils/Constants.dart';
+import '../../profile_detail/components/update_profile_form.dart';
 import 'complete_profile_form.dart';
 
 class Body extends StatelessWidget {
@@ -26,7 +27,7 @@ class Body extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: SizeConfig.screenHeight * 0.06),
-                CompleteProfileForm(),
+                const CompleteProfileForm(),
                 SizedBox(height: getProportionateScreenHeight(30)),
                 Text(
                   "By continuing your confirm that you agree \nwith our Term and Condition",

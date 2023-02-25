@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:shopapp/components/default_button.dart';
 import 'package:shopapp/screens/home/home_screen.dart';
+import 'package:shopapp/screens/profile/profile_screen.dart';
 import 'package:shopapp/utils/size_config.dart';
 
+import '../../../Models/Settings.dart';
 import '../../sign_in/sign_in_screen.dart';
 
 class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final PageArguments agrs =
+        ModalRoute.of(context)!.settings.arguments as PageArguments;
+
     return Column(
       children: [
         SizedBox(height: SizeConfig.screenHeight * 0.04),
@@ -17,7 +22,7 @@ class Body extends StatelessWidget {
         ),
         SizedBox(height: SizeConfig.screenHeight * 0.08),
         Text(
-          "Successfuly Registered",
+          agrs.message,
           style: TextStyle(
             fontSize: getProportionateScreenWidth(30),
             fontWeight: FontWeight.bold,
@@ -28,9 +33,13 @@ class Body extends StatelessWidget {
         SizedBox(
           width: SizeConfig.screenWidth * 0.6,
           child: DefaultButton(
-            text: "Back to Login",
+            text: agrs.buttonlabel,
             press: () {
-              Navigator.pushNamed(context, SignInScreen.routeName);
+              if (agrs.perviousPagename == "update") {
+                Navigator.pushNamed(context, ProfileScreen.routeName);
+              } else {
+                MaterialPageRoute(builder: (context) => const SignInScreen());
+              }
             },
           ),
         ),

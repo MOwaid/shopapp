@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../Models/Cart.dart';
+import '../../Models/Product.dart';
 import 'components/body.dart';
 import 'components/check_out_card.dart';
 
@@ -13,22 +15,47 @@ class CartScreen extends StatelessWidget {
     return Scaffold(
       appBar: buildAppBar(context),
       body: const Body(),
-      bottomNavigationBar: const CheckoutCard(),
+      bottomNavigationBar: CheckoutCard(),
     );
   }
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
       title: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          const Text(
-            "Your Cart",
-            style: TextStyle(color: Colors.black),
-          ),
-          Text(
-            "${demoCarts.length} items",
-            style: Theme.of(context).textTheme.caption,
-          ),
+          Row(children: [
+            const SizedBox(
+              width: 50,
+              child: Text(
+                "Cart -",
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+            const SizedBox(width: 10),
+            SizedBox(
+              width: 88,
+              child: Text(
+                "${Provider.of<CartOne>(context, listen: true).items.length} items",
+                style: const TextStyle(color: Colors.white, fontSize: 18),
+              ),
+            )
+          ]),
+          const SizedBox(height: 7),
+          Row(children: const [
+            Icon(
+              Icons.swipe_left,
+              size: 20.0,
+              color: Colors.white,
+            ),
+            SizedBox(
+              width: 200,
+              child: Text(
+                "   Swipe left to remove items",
+                style: TextStyle(color: Colors.yellow, fontSize: 14),
+              ),
+            )
+          ]),
         ],
       ),
     );

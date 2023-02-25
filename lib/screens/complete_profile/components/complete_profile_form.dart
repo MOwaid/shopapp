@@ -7,6 +7,7 @@ import 'package:shopapp/screens/otp/otp_screen.dart';
 import 'package:intl/intl.dart';
 import '../../../Models/Address.dart';
 import '../../../Models/DBHelper.dart';
+import '../../../Models/Settings.dart';
 import '../../../Models/User.dart';
 
 import '../../../utils/Constants.dart';
@@ -239,7 +240,14 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
 
     final bool result = await DBHelper.insert(u);
     if (result == true) {
-      Navigator.pushNamed(context, LoginSuccessScreen.routeName);
+      // ignore: use_build_context_synchronously
+      Navigator.pushNamed(context, LoginSuccessScreen.routeName,
+          arguments: PageArguments(
+              message: "Successfully Added",
+              buttonlabel: "Back to Login",
+              perviousPagename: "Added"));
+
+//      Navigator.pushNamed(context, LoginSuccessScreen.routeName);
     } else {
       showAlertDialog(
           context, "User Exist", "User already exist with this number!");

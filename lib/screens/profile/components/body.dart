@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shopapp/screens/contactus/contact_screen.dart';
+import 'package:shopapp/screens/splash/splash_screen.dart';
 
+import '../../profile_detail/profile_detail.dart';
+import '../../settings/settings.dart';
 import 'profile_menu.dart';
 import 'profile_pic.dart';
 
@@ -7,15 +11,17 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(vertical: 20),
+      padding: const EdgeInsets.symmetric(vertical: 20),
       child: Column(
         children: [
-          ProfilePic(),
-          SizedBox(height: 20),
+          const ProfilePic(),
+          const SizedBox(height: 20),
           ProfileMenu(
             text: "My Account",
             icon: "assets/icons/User Icon.svg",
-            press: () => {},
+            press: () {
+              Navigator.pushNamed(context, ProfileDetailScreen.routeName);
+            },
           ),
           ProfileMenu(
             text: "Notifications",
@@ -25,17 +31,23 @@ class Body extends StatelessWidget {
           ProfileMenu(
             text: "Settings",
             icon: "assets/icons/Settings.svg",
-            press: () {},
+            press: () {
+              Navigator.pushNamed(context, SettingsScreen.routeName);
+            },
           ),
           ProfileMenu(
             text: "Help Center",
             icon: "assets/icons/Question mark.svg",
-            press: () {},
+            press: () {
+              Navigator.pushNamed(context, ContactScreen.routeName);
+            },
           ),
           ProfileMenu(
             text: "Log Out",
             icon: "assets/icons/Log out.svg",
-            press: () {},
+            press: () {
+              Navigator.pushNamed(context, SplashScreen.routeName);
+            },
           ),
         ],
       ),
